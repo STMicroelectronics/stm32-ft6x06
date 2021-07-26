@@ -29,13 +29,13 @@
   * @{
   */
 
-/** @defgroup FT6X06
+/** @defgroup FT6XX6
   * @{
   */
 
 /* Private typedef -----------------------------------------------------------*/
 
-/** @defgroup FT6X06_Private_Defines FT6X06 Private Defines
+/** @defgroup FT6XX6_Private_Defines FT6XX6 Private Defines
   * @{
   */
 #define FT6x06_MAX_INSTANCE  2
@@ -45,7 +45,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 
-/** @defgroup FT6X06_Private_Variables FT6X06 Private Variables
+/** @defgroup FT6XX6_Private_Variables FT6XX6 Private Variables
   * @{
   */
 
@@ -66,17 +66,17 @@ TS_DrvTypeDef ft6x06_ts_drv =
   ft6x06_TS_DisableIT
 };
 
-/* ft6x06 instances by address */
+/* ft6xx6 instances by address */
 uint8_t ft6x06[FT6x06_MAX_INSTANCE] = {0};
 
-/* Global ft6x06 handle */
+/* Global ft6xx6 handle */
 static ft6x06_handle_TypeDef ft6x06_handle = { FT6206_I2C_NOT_INITIALIZED, 0, 0};
 
 /**
   * @}
   */
 
-/** @defgroup ft6x06_Private_Function_Prototypes ft6x06 Private Function Prototypes
+/** @defgroup ft6xx6_Private_Function_Prototypes ft6xx6 Private Function Prototypes
   * @{
   */
 static uint8_t ft6x06_GetInstance(uint16_t DeviceAddr);
@@ -84,7 +84,7 @@ static uint8_t ft6x06_GetInstance(uint16_t DeviceAddr);
 #if (TS_AUTO_CALIBRATION_SUPPORTED == 1)
 /**
   * @brief  Start TouchScreen calibration phase
-  * @param  DeviceAddr: FT6206 Device address for communication on I2C Bus.
+  * @param  DeviceAddr: FT6xx6 Device address for communication on I2C Bus.
   * @retval Status FT6206_STATUS_OK or FT6206_STATUS_NOT_OK.
   */
 static uint32_t ft6x06_TS_Calibration(uint16_t DeviceAddr);
@@ -92,7 +92,7 @@ static uint32_t ft6x06_TS_Calibration(uint16_t DeviceAddr);
 
 /**
   * @brief  Basic static configuration of TouchScreen
-  * @param  DeviceAddr: FT6206 Device address for communication on I2C Bus.
+  * @param  DeviceAddr: FT6xx6 Device address for communication on I2C Bus.
   * @retval Status FT6206_STATUS_OK or FT6206_STATUS_NOT_OK.
   */
 static uint32_t ft6x06_TS_Configure(uint16_t DeviceAddr);
@@ -101,14 +101,14 @@ static uint32_t ft6x06_TS_Configure(uint16_t DeviceAddr);
   * @}
   */
 
-/** @defgroup ft6x06_Private_Functions ft6x06 Private Functions
+/** @defgroup ft6xx6_Private_Functions ft6xx6 Private Functions
   * @{
   */
 
 /**
-  * @brief  Initialize the ft6x06 communication bus
-  *         from MCU to FT6206 : ie I2C channel initialization (if required).
-  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6206).
+  * @brief  Initialize the ft6xx6 communication bus
+  *         from MCU to FT6xx6 : ie I2C channel initialization (if required).
+  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6xx6).
   * @retval None
   */
 void ft6x06_Init(uint16_t DeviceAddr)
@@ -137,21 +137,21 @@ void ft6x06_Init(uint16_t DeviceAddr)
 }
 
 /**
-  * @brief  Software Reset the ft6x06.
-  *         @note : Not applicable to FT6206.
-  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6206).
+  * @brief  Software Reset the ft6xx6.
+  *         @note : Not applicable to FT6xx6.
+  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6xx6).
   * @retval None
   */
 void ft6x06_Reset(uint16_t DeviceAddr)
 {
   /* Do nothing */
-  /* No software reset sequence available in FT6206 IC */
+  /* No software reset sequence available in FT6xx6 IC */
 }
 
 /**
-  * @brief  Read the ft6x06 device ID, pre initialize I2C in case of need to be
-  *         able to read the FT6206 device ID, and verify this is a FT6206.
-  * @param  DeviceAddr: I2C FT6x06 Slave address.
+  * @brief  Read the ft6xx6 device ID, pre initialize I2C in case of need to be
+  *         able to read the FT6xx6 device ID, and verify this is a FT6xx6.
+  * @param  DeviceAddr: I2C FT6xx6 Slave address.
   * @retval The Device ID (two bytes).
   */
 uint16_t ft6x06_ReadID(uint16_t DeviceAddr)
@@ -177,10 +177,10 @@ void ft6x06_TS_Start(uint16_t DeviceAddr)
   /* This is called internal calibration of the touch screen                 */
   ft6x06_TS_Calibration(DeviceAddr);
 #endif
-  /* Minimum static configuration of FT6206 */
+  /* Minimum static configuration of FT6xx6 */
   ft6x06_TS_Configure(DeviceAddr);
 
-  /* By default set FT6206 IC in Polling mode : no INT generation on FT6206 for new touch available */
+  /* By default set FT6xx6 IC in Polling mode : no INT generation on FT6xx6 for new touch available */
   /* Note TS_INT is active low                                                                      */
   ft6x06_TS_DisableIT(DeviceAddr);
 }
@@ -206,7 +206,7 @@ uint8_t ft6x06_TS_DetectTouch(uint16_t DeviceAddr)
     nbTouch = 0;
   }
 
-  /* Update ft6x06 driver internal global : current number of active touches */
+  /* Update ft6xx6 driver internal global : current number of active touches */
   ft6x06_handle.currActiveTouchNb = nbTouch;
 
   /* Reset current active touch index on which to work on */
@@ -258,9 +258,9 @@ void ft6x06_TS_GetXY(uint16_t DeviceAddr, uint16_t *X, uint16_t *Y)
 }
 
 /**
-  * @brief  Configure the FT6206 device to generate IT on given INT pin
+  * @brief  Configure the FT6xx6 device to generate IT on given INT pin
   *         connected to MCU as EXTI.
-  * @param  DeviceAddr: Device address on communication Bus (Slave I2C address of FT6206).
+  * @param  DeviceAddr: Device address on communication Bus (Slave I2C address of FT6xx6).
   * @retval None
   */
 void ft6x06_TS_EnableIT(uint16_t DeviceAddr)
@@ -273,9 +273,9 @@ void ft6x06_TS_EnableIT(uint16_t DeviceAddr)
 }
 
 /**
-  * @brief  Configure the FT6206 device to stop generating IT on the given INT pin
+  * @brief  Configure the FT6xx6 device to stop generating IT on the given INT pin
   *         connected to MCU as EXTI.
-  * @param  DeviceAddr: Device address on communication Bus (Slave I2C address of FT6206).
+  * @param  DeviceAddr: Device address on communication Bus (Slave I2C address of FT6xx6).
   * @retval None
   */
 void ft6x06_TS_DisableIT(uint16_t DeviceAddr)
@@ -288,29 +288,29 @@ void ft6x06_TS_DisableIT(uint16_t DeviceAddr)
 }
 
 /**
-  * @brief  Get IT status from FT6206 interrupt status registers
+  * @brief  Get IT status from FT6xx6 interrupt status registers
   *         Should be called Following an EXTI coming to the MCU to know the detailed
   *         reason of the interrupt.
-  *         @note : This feature is not applicable to FT6206.
-  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6206).
+  *         @note : This feature is not applicable to FT6xx6.
+  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6xx6).
   * @retval TS interrupts status : always return 0 here
   */
 uint8_t ft6x06_TS_ITStatus(uint16_t DeviceAddr)
 {
-  /* Always return 0 as feature not applicable to FT6206 */
+  /* Always return 0 as feature not applicable to FT6xx6 */
   return 0;
 }
 
 /**
-  * @brief  Clear IT status in FT6206 interrupt status clear registers
+  * @brief  Clear IT status in FT6xx6 interrupt status clear registers
   *         Should be called Following an EXTI coming to the MCU.
-  *         @note : This feature is not applicable to FT6206.
-  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6206).
+  *         @note : This feature is not applicable to FT6xx6.
+  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6xx6).
   * @retval None
   */
 void ft6x06_TS_ClearIT(uint16_t DeviceAddr)
 {
-  /* Nothing to be done here for FT6206 */
+  /* Nothing to be done here for FT6xx6 */
 }
 
 /**** NEW FEATURES enabled when Multi-touch support is enabled ****/
@@ -318,7 +318,7 @@ void ft6x06_TS_ClearIT(uint16_t DeviceAddr)
 #if (TS_MULTI_TOUCH_SUPPORTED == 1)
 /**
   * @brief  Get the last touch gesture identification (zoom, move up/down...).
-  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6x06).
+  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6xx6).
   * @param  pGestureId : Pointer to get last touch gesture Identification.
   * @retval None.
   */
@@ -337,7 +337,7 @@ void ft6x06_TS_GetGestureID(uint16_t DeviceAddr, uint32_t * pGestureId)
   *         - weight that was applied to this touch
   *         - sub-area of the touch in the touch panel
   *         - event of linked to the touch (press down, lift up, ...)
-  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6x06).
+  * @param  DeviceAddr: Device address on communication Bus (I2C slave address of FT6xx6).
   * @param  touchIdx : Passed index of the touch (0..1) on which we want to get the
   *                    detailed information.
   * @param  pWeight : Pointer to to get the weight information of 'touchIdx'.
@@ -390,7 +390,7 @@ void ft6x06_TS_GetTouchInfo(uint16_t   DeviceAddr,
 #if (TS_AUTO_CALIBRATION_SUPPORTED == 1)
 /**
   * @brief  Start TouchScreen calibration phase
-  * @param  DeviceAddr: FT6206 Device address for communication on I2C Bus.
+  * @param  DeviceAddr: FT6xx6 Device address for communication on I2C Bus.
   * @retval Status FT6206_STATUS_OK or FT6206_STATUS_NOT_OK.
   */
 static uint32_t ft6x06_TS_Calibration(uint16_t DeviceAddr)
@@ -403,7 +403,7 @@ static uint32_t ft6x06_TS_Calibration(uint16_t DeviceAddr)
 
   /* >> Calibration sequence start */
 
-  /* Switch FT6206 back to factory mode to calibrate */
+  /* Switch FT6xx6 back to factory mode to calibrate */
   regValue = (FT6206_DEV_MODE_FACTORY & FT6206_DEV_MODE_MASK) << FT6206_DEV_MODE_SHIFT;
   TS_IO_Write(DeviceAddr, FT6206_DEV_MODE_REG, regValue); /* 0x40 */
 
@@ -443,14 +443,14 @@ static uint32_t ft6x06_TS_Calibration(uint16_t DeviceAddr)
 
 /**
   * @brief  Basic static configuration of TouchScreen
-  * @param  DeviceAddr: FT6206 Device address for communication on I2C Bus.
+  * @param  DeviceAddr: FT6xx6 Device address for communication on I2C Bus.
   * @retval Status FT6206_STATUS_OK or FT6206_STATUS_NOT_OK.
   */
 static uint32_t ft6x06_TS_Configure(uint16_t DeviceAddr)
 {
   uint32_t status = FT6206_STATUS_OK;
 
-  /* Nothing special to be done for FT6206 */
+  /* Nothing special to be done for FT6xx6 */
 
   return(status);
 }
